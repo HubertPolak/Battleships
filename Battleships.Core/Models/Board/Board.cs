@@ -34,7 +34,7 @@ public class Board
         }
 
         var board = new Board(grid);
-        board.GenerateBoardState(ships);
+        board.SetupBoard(ships);
 
         return board;
     }
@@ -57,8 +57,7 @@ public class Board
         return true;
     }
 
-    //TODO: Reaname to make clear this is starting state only
-    private void GenerateBoardState(ICollection<Ship> ships)
+    private void SetupBoard(ICollection<Ship> ships)
     {
         var randomGenerator = new Random();
         var occupiedCoordinates = new List<(int, int)>();
