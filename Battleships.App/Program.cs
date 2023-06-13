@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 var serviceProvider = new ServiceCollection()
     .AddGameServices()
     .AddUIServices()
+    .AddSerilogLogging()
     .BuildServiceProvider();
 
 var uiService = serviceProvider.GetService<IUIGenerator>();

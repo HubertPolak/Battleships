@@ -2,13 +2,18 @@
 
 using Battleships.Core.Models.Board;
 using Battleships.Core.Models.Ship;
+using Microsoft.Extensions.Logging;
 
 public class GameService : IGameService
 {
+    private readonly ILogger<GameService> _logger;
+
     private readonly Board _board;
 
-    public GameService()
+    public GameService(ILogger<GameService> logger)
     {
+        _logger = logger;
+
         var directions = Enum.GetValues(typeof(Direction)).Cast<Direction>().ToList();
         var random = new Random();
 
@@ -22,21 +27,30 @@ public class GameService : IGameService
 
     public IList<IList<Cell>> GetGrid()
     {
+        _logger.LogInformation("Returning grid.");
         return _board.Grid;
     }
 
     public Cell GetCell(int column, int row)
     {
+        _logger.LogInformation("Returning cell in column {column} row {row}.", column, row);
         return _board.Grid[column][row];
     }
 
     public bool ResolveHitAction(int column, int row)
     {
+        _logger.LogInformation("Resolving hit action for cell in column {column} row {row}.", column, row);
         return _board.Hit(column, row);
     }
 
     public bool IsGameOver()
     {
-        return _board.IsGameOver();
+        _logger.LogInformation("Checking whether game is over.");
+
+        var isGameOver = _board.IsGameOver();
+
+        _logger.LogInformation("Returning current state. Game over: {isGameOver}", isGameOver);
+
+        return isGameOver;
     }
 }

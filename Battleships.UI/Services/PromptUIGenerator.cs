@@ -1,12 +1,22 @@
-﻿using Sharprompt;
+﻿using Microsoft.Extensions.Logging;
+using Sharprompt;
 
 namespace Battleships.UI.Services;
 
 public class PromptUIGenerator : IPromptUIGenerator
 {
+    private readonly ILogger<PromptUIGenerator> _logger;
+
+    public PromptUIGenerator(ILogger<PromptUIGenerator> logger)
+    {
+        _logger = logger;
+    }
+
     public string ShowHitPrompt()
     {
-        var columnNamesRange = $"{Constants.ColumnNames.First()}-{Constants.ColumnNames.Last()}";
+        _logger.LogInformation("Showing hit promopt to user.")
+
+        var columnNamesRange = $"{Constants.ColumnLetters.First()}-{Constants.ColumnLetters.Last()}";
         var hitCoordinates = Prompt.Input<string>("Enter cell to target",
             validators: new[] 
             { 
@@ -16,7 +26,7 @@ public class PromptUIGenerator : IPromptUIGenerator
                 Validators.RegularExpression(@$"[{columnNamesRange}]10|[{columnNamesRange}][1-9]$", "Value does not match a pattern for valid coordinates.") 
             });
 
-        Console.WriteLine($"Targeted: {hitCoordinates}");
+        _logger.LogInformation("Hit coordinates chosen {hitCoordinates}", hitCoordinates);
 
         return hitCoordinates;
     }
