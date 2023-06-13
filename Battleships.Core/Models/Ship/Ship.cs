@@ -5,9 +5,9 @@ public class Ship
     public readonly int Length;
     public readonly Direction Direction;
 
-    public int CellsHit { get; private set; }
+    protected int CellsHit { get; private set; }
 
-    private Ship(int length, Direction direction)
+    protected Ship(int length, Direction direction)
     {
         Length = length;
         Direction = direction;

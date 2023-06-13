@@ -9,12 +9,12 @@ public class Board
 
     private readonly List<(int, int)> _coordinates;
 
-    private Board(IList<IList<Cell>> grid)
+    protected Board(IList<IList<Cell>> grid)
     {
         Grid = grid;
 
-        var columns = Enumerable.Range(1, Constants.Grid.Width);
-        var rows = Enumerable.Range(1, Constants.Grid.Height);
+        var columns = Enumerable.Range(0, Constants.Grid.Width - 1);
+        var rows = Enumerable.Range(0, Constants.Grid.Height - 1);
 
         _coordinates = columns.Select(c => rows.Select(r => (c, r))).SelectMany(x => x).ToList();
     }
@@ -39,9 +39,9 @@ public class Board
         return board;
     }
 
-    public bool Hit(int column, int row)
+    public void Hit(int column, int row)
     {
-        return Grid[column][row].Hit();
+        Grid[column][row].Hit();
     }
 
     public bool IsGameOver()
@@ -76,23 +76,23 @@ public class Board
         }
     }
 
-    private bool IsCoordinateOutOfRange((int column, int row) coordinate, Ship ship)
+    protected bool IsCoordinateOutOfRange((int column, int row) coordinate, Ship ship)
     {
-        return ship.Direction == Direction.Horizontal ? coordinate.column + ship.Length - 1 > Constants.Grid.Width : coordinate.row + ship.Length - 1 > Constants.Grid.Height;
+        return ship.Direction == Direction.Horizontal ? coordinate.column + ship.Length > Constants.Grid.Width : coordinate.row + ship.Length > Constants.Grid.Height;
     }
 
-    private bool IsCoordinateOccupied((int, int) coordinate, IList<(int, int)> occupiedCoordinates)
+    protected bool IsCoordinateOccupied((int, int) coordinate, IList<(int, int)> occupiedCoordinates)
     {
         return occupiedCoordinates.Any(o => o == coordinate);
     }
 
-    private bool IsCoordinateOverlappingWithPlacedShip((int column, int row) coordinate, IList<(int column, int row)> occupiedCoordinates, Ship ship)
+    protected bool IsCoordinateOverlappingWithPlacedShip((int column, int row) coordinate, IList<(int column, int row)> occupiedCoordinates, Ship ship)
     {
-        return ship.Direction == Direction.Horizontal ? occupiedCoordinates.Any(o => o.row == coordinate.row && coordinate.column < o.column && coordinate.column + ship.Length - 1 > o.column) :
-            occupiedCoordinates.Any(o => o.column == coordinate.column && coordinate.row < o.row && coordinate.row + ship.Length - 1 > o.row);
+        return ship.Direction == Direction.Horizontal ? occupiedCoordinates.Any(o => o.row == coordinate.row && coordinate.column < o.column && coordinate.column + ship.Length - 1 >= o.column) :
+            occupiedCoordinates.Any(o => o.column == coordinate.column && coordinate.row < o.row && coordinate.row + ship.Length - 1 >= o.row);
     }
 
-    private IList<(int, int)> PlaceShip((int column, int row) coordinate, Ship ship)
+    protected IList<(int, int)> PlaceShip((int column, int row) coordinate, Ship ship)
     {
         var occupiedCoordinates = new List<(int, int)>();
 
@@ -100,12 +100,12 @@ public class Board
         {
             if (ship.Direction == Direction.Horizontal)
             {
-                Grid[coordinate.column - 1 + i][coordinate.row - 1].PlaceShip(ship);
+                Grid[coordinate.column + i][coordinate.row].PlaceShip(ship);
                 occupiedCoordinates.Add((coordinate.column + i, coordinate.row));
                 continue;
             }
 
-            Grid[coordinate.column - 1][coordinate.row - 1 + i].PlaceShip(ship);
+            Grid[coordinate.column][coordinate.row + i].PlaceShip(ship);
             occupiedCoordinates.Add((coordinate.column, coordinate.row + i));
         }
 

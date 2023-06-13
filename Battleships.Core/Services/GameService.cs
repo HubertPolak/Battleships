@@ -37,10 +37,10 @@ public class GameService : IGameService
         return _board.Grid[column][row];
     }
 
-    public bool ResolveHitAction(int column, int row)
+    public void ResolveHitAction(int column, int row)
     {
         _logger.LogInformation("Resolving hit action for cell in column {column} row {row}.", column, row);
-        return _board.Hit(column, row);
+        _board.Hit(column, row);
     }
 
     public bool IsGameOver()

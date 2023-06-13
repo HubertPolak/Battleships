@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
-using Sharprompt;
+﻿namespace Battleships.UI.Services;
 
-namespace Battleships.UI.Services;
+using Microsoft.Extensions.Logging;
+using Sharprompt;
 
 public class PromptUIGenerator : IPromptUIGenerator
 {
@@ -14,7 +14,7 @@ public class PromptUIGenerator : IPromptUIGenerator
 
     public string ShowHitPrompt()
     {
-        _logger.LogInformation("Showing hit promopt to user.")
+        _logger.LogInformation("Showing hit promopt to user.");
 
         var columnNamesRange = $"{Constants.ColumnLetters.First()}-{Constants.ColumnLetters.Last()}";
         var hitCoordinates = Prompt.Input<string>("Enter cell to target",

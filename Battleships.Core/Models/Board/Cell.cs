@@ -17,23 +17,21 @@ public class Cell
         return new Cell(CellState.Unknown);
     }
 
-    public bool Hit()
+    public void Hit()
     {
         if (Ship == null)
         {
             State = CellState.Miss;
-            return false;
+            return;
         }
 
         if (State != CellState.Unknown)
         {
-            return false;
+            return;
         }
 
         Ship.Hit();
         State = CellState.Hit;
-
-        return Ship.IsSunk();
     }
 
     public void PlaceShip(Ship ship)

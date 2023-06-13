@@ -1,6 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿namespace Battleships.UI.Services;
 
-namespace Battleships.UI.Services;
+using Microsoft.Extensions.Logging;
 
 public class CoordinateTranslator : ICoordinateTranslator
 {
